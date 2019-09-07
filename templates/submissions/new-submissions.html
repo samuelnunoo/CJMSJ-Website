@@ -1,0 +1,400 @@
+
+{% extends "main/layout.html" %}
+{% load static %}
+
+{%  block stylesheets %}
+   <link rel="stylesheet" href="{% static 'css/cropper.css' %}">
+    {{ form.media.css }}
+{%  endblock stylesheets %}
+
+{% block content %}
+
+ <!--     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"> -->
+
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2" align="center">
+                    <div class="intro">
+                        <div class="alert alert-danger" role="alert">
+                            This is a danger alert—check it out!
+                        </div>
+
+
+                        <form id="post-form" action="" method="POST">
+                            {% csrf_token %}
+
+                        <h1 id='Title' contenteditable="true" style='font-size:3.5em;' class="text-center">Blog Title Here!</h1>
+                            {{ form.Profiles}}
+                        <p class="text-center"><span class="by"></span> <a href="{{ object.Author__ }}">{{ object.Author}}</a><span class="date">{{ object.Created }}</span></p>
+
+                        <label style='width:100%;' class="label" data-toggle="tooltip" title="" data-original-title="Change the image">
+                            <img style="padding-bottom: 20px; width:100%;" id="avatar" src="{% static 'img/beautiful-landscape.jpg' %}" alt="avatar">
+                            <input type="file" class="sr-only" id="input" name="image" accept="image/*">
+                        </label>
+                         <div class="text" id="Content">
+
+                        {{ form.Description }}
+
+                        {{form.Content}}
+                    </div>
+                        <input id='submit-button' class='btn submit-button my-4 py-3 px-4' type="button" value="Submit"/>
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">Crop the image</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="img-container">
+              <img id="image" src="{% static 'img/beautiful-landscape.jpg' %}">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="crop">Crop</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+            </div>
+        </div>
+    </div>
+
+
+{%  endblock content  %}
+
+
+<!-- Scripts Here! -->
+{%  block javascript %}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.bundle.min.js"></script>
+    <script src="{%  static 'js/cropper.js' %}"></script>
+  <!--  <script src="{%  static 'js/jquery.min.js' %}"></script>  -->
+  <!--  <script src="{%  static 'js/crop.js' %}"></script> -->
+   <!-- <script src="{% static 'js/submit.js' %}"></script> -->
+
+    <script>
+
+    window.addEventListener('DOMContentLoaded', function () {
+
+        console.log('Loaded')
+
+
+    // This function gets cookie with a given name
+    function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }py
+            }
+        }
+        return cookieValue;
+    }
+    var csrftoken = getCookie('csrftoken');
+
+    /*
+    The functions below will create a header with csrftoken
+    */
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+    function sameOrigin(url) {
+        // test that a given url is a same-origin URL
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+
+
+      //Initalizes variables
+      var avatar = document.getElementById('avatar');
+      var image = document.getElementById('image');
+      var input = document.getElementById('input');
+      var $alert = $('.alert');
+      var $modal = $('#modal');
+      var cropper;
+      var submit = document.getElementById('submit-button');
+      var dialog = bootbox.dialog({
+                                title: 'Your Request is being Processed',
+                                 message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>',
+                                  show: false
+                                    });
+      var Submission = false;
+
+
+      //Initalizes tooltip?
+      $('[data-toggle="tooltip"]').tooltip();
+
+
+        //Input Event
+      input.addEventListener('change', function (e) {
+
+        var files = e.target.files;
+        var done = function (url) {
+            input.value= '';
+          image.src = url;
+          $alert.hide();
+          $modal.modal('show');
+        };
+        var reader;
+        var file;
+        var url;
+
+
+        if (files && files.length > 0) {
+          file = files[0];
+
+          if (URL) {
+            done(URL.createObjectURL(file));
+          } else if (FileReader) {
+            reader = new FileReader();
+            reader.onload = function (e) {
+              done(reader.result);
+            };
+            reader.readAsDataURL(file);
+          }
+        }
+      });
+
+
+
+      //Event when Modal is shown
+      $modal.on('shown.bs.modal', function () {
+        cropper = new Cropper(image, {
+          aspectRatio: 1.77777777778,
+          viewMode: 3,
+        });
+
+        //Destroys Cropper after Modal is hidden
+      }).on('hidden.bs.modal', function () {
+        cropper.destroy();
+        cropper = null;
+      });
+
+
+      // Event when crop button is clicked
+      document.getElementById('crop').addEventListener('click', function () {
+        var initialAvatarURL;
+
+
+        $modal.modal('hide');
+
+        if (cropper) {
+
+          //Gets the cropped image
+          canvas = cropper.getCroppedCanvas({})
+            console.log(canvas)
+
+
+          //Sets var to the image
+          initialAvatarURL = avatar.src;
+          //Passes the type of the original image to preserve image dimensions
+          avatar.src = canvas.toDataURL();
+          //SHows the progress HTML Element
+          //$progress.show();
+
+          //$alert.removeClass('alert-success alert-warning');
+          //This is the compressopion
+
+
+        }
+        ;
+
+      });
+
+
+        //Submit Event
+      submit.addEventListener('click', function(){
+          console.log("started submit")
+
+           var Selections = document.querySelectorAll('.select2-selection__choice');
+           var Authors = [];
+
+           Selections.forEach(function(element){
+                console.log(element.getAttribute("Title"))
+                Authors.push(element.getAttribute("Title"))
+            })
+
+
+
+          try {
+              canvas.toBlob(function (blob) {
+
+                  // Initalizing FormData object
+                  var formData_ = new FormData();
+
+
+                  //Adding avatar passed blob and avatar.jpg
+                  let Title = $('#Title').html();
+                  var Content = $('iframe').contents().find('body').html();
+                  let Image_Check = $('#avatar').attr('src');
+                  let Description =  $('#id_Description').val();
+
+
+                  formData_.append('Content', Content);
+                  formData_.append('Title', Title);
+                  formData_.append('Image', blob);
+                  formData_.append('Description',Description);
+                  formData_.append("Authors",Authors)
+                  console.log(formData_);
+
+
+                  //Asynchronous JavaScript And XML.
+                  $.ajax('/ajax/submit', {
+                      method: 'POST',
+                      data: formData_,
+                      processData: false,
+                      contentType: false,
+                      beforeSend: function (xhr,settings) {
+
+
+                        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                                // Send the token to same-origin, relative URLs only.
+                                // Send the token only if the method warrants CSRF protection
+                                // Using the CSRFToken value acquired earlier
+                                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                            }
+
+
+                          $.getJSON('/ajax/authorized', function(data){
+                                if (data['sign-up']){
+                                    console.log("sign up");
+                                    bootbox.alert("Please Sign-Up",function(){
+                                    location.href='/users/signup/';
+                                        });
+
+                                         }
+
+                                });
+
+                        if (Authors.length < 1) {
+                             bootbox.alert("Please add Authors to your Submission",function(){
+
+                                        });
+                             return false;
+                        }
+
+                          if (Image_Check == 'https://cjmsj.s3.amazonaws.com/static/img/beautiful-landscape.jpg') {
+
+                               bootbox.alert("Please provide a valid Image",function(){
+                                    location.href='#';
+                                        });
+
+                              return false
+                          }
+
+                          if (Title == "" || Title == 'Blog Title Here!') {
+                              bootbox.alert("Please provide a valid Title",function(){
+                                    location.href='#';
+                                        });
+                              return false
+                          }
+
+                          if (Content == "") {
+                              bootbox.alert("Please add content to the Post",function(){
+                                    location.href='#Content';
+                                        });
+
+                              return false
+                          }
+
+                          if (Description =="" || Description == "This is a sample Description"){
+                              bootbox.alert("Please add a valid Description to the Post",function(){
+                                    location.href='#id_Description';
+                                        });
+                              return false
+                          }
+
+
+                          dialog.modal('show')
+
+                      },
+                      complete: function () {
+                          Submission = true
+                          dialog.modal('hide')
+
+                          bootbox.alert("Your post has been  Submited!", function(){
+                                        location.href = '/'; }
+
+                                )
+
+                      }
+
+
+                  });
+              });
+          }
+
+          catch(err) {
+              // Move to Object
+
+              bootbox.alert("Please provide a valid Image",function(){
+                  location.href='#';
+
+              });
+          }
+
+
+
+
+
+      })})
+    $(document).ready(function(){
+
+
+
+
+var substringMatcher = function(strs) {
+      return function findMatches(q, cb) {
+        var matches, substringRegex;
+
+        // an array that will be populated with substring matches
+        matches = [];
+
+        // regex used to determine if a string contains the substring `q`
+        substrRegex = new RegExp(q, 'i');
+
+        // iterate through the pool of strings and for any string that
+        // contains the substring `q`, add it to the `matches` array
+        $.each(strs, function(i, str) {
+          if (substrRegex.test(str)) {
+            matches.push(str);
+          }
+        });
+
+        cb(matches);
+      };
+    };})
+
+
+    </script>
+    {{ form.media.js }}
+        {{ form.media }}
+{%  endblock javascript %}
+<!---->

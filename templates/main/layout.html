@@ -1,0 +1,160 @@
+ <!DOCTYPE html>
+
+
+
+<html>
+
+<!-- Head Section -->
+<head>
+
+
+
+    <!-- CSS Files -->
+    {% load staticfiles %}
+
+    <script src="https://kit.fontawesome.com/3b7db4f790.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" >
+
+    {% block stylesheets %}
+    {% endblock stylesheets %}
+
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=EB+Garamond" rel="stylesheet">
+
+
+    <!-- Viewport Script -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+
+
+</head>
+
+
+
+<body>>
+
+    <!-- Header Content -->
+    <div class="container">
+         <header class="blog-header py-3">
+         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+        <div class="row flex-nowrap justify-content-between align-items-center">
+          <div class="col-4 pt-1">
+
+          </div>
+          <div class="col-4 text-center">
+
+            <a class="navbar-brand blog-header-logo text-dark header" href="/" style='font-size:200% !important;'>
+    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTLqDWLN-Hsi8aGDnvwgW__gG4ZhaGsiRAixhr_Fre8n_pRS-UPIg" width="40" height="50" alt="" style=' position: relative;  top:-10px;
+'> </img>  CJMSJ
+  </a>
+          </div>
+
+
+          <div class="col-4 d-flex justify-content-end align-items-center">
+            <a class="text-muted" href="#Search-Bar" data-toggle="collapse">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="mx-3"><circle cx="10.5" cy="10.5" r="7.5"></circle><line x1="21" y1="21" x2="15.8" y2="15.8"></line></svg>
+            </a>
+              {%  if user.is_authenticated %}
+                     <a style='transform: scale(2); padding:0em 1.5em 0 1em;' class = 'fa fa-user-circle' href = '/users/profile'> </a>
+                  <a class="sr-only" href=""> <img style="border-radius:50%;" src="{%  static 'img/beautiful-landscape.jpg'  %}"> </a>
+
+            <a  style='border-radius:.2em' class="btn btn-sm btn-outline-secondary" href="/logout">Sign Out</a>
+              {% else %}
+              <a style='border-radius:.2em' class="btn btn-sm btn-outline-secondary" href="/users/signup">Sign Up</a>
+
+              {% endif %}
+          </div>
+        </div>
+      <div id='Search-Bar'class='container collapse multi-collapse' data-toggle='collapse'>
+          <form method="GET" >
+                  <input  type='text' class="form-control" name='q' type="text" placeholder="Search"  value="{{ request.GET.q }}" aria-label="Search"/>
+
+          </form> </div>
+        <hr>
+      </header>
+    <nav class="nav-scroller py-1 mb-2">
+        <nav class="nav d-flex justify-content-between">
+          <a class="p-2 size " href="/">Home</a>
+          <a class="p-2 size" href="/blogs/"> Articles</a>
+          <a class="p-2 size" href="/about/">About</a>
+          <a class="p-2 size" href="/team/">Our Team</a>
+          <a class="p-2 size" href="/blogs/create/">Submissions</a>
+          <a class="p-2 size" href="/contact/">Contact</a>
+            {%  if user.is_authenticated  %}
+            {% else %}
+            <a class="p-2 size" href="/login" > Login</a>
+            {% endif %}
+
+          {% if user.is_staff %}
+          <a class="p-2 size" href="/blogs/review">Review</a>
+          {% else %}
+          {% endif %}
+
+        </nav>
+        <hr>
+      </nav>
+
+    </div>
+
+    <!-- Dynamic Content -->
+    <main>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    </main>
+
+</body>
+
+
+    <!-- Scripts-->
+    <script src="{% static 'js/jquery.min.js' %}" ></script>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script  src="{% static 'bootstrap/js/bootstrap.min.js' %}" ></script>
+    <script src="{% static 'js/bootbox.all.min.js' %}"></script>
+    <script>
+$(document).ready(function(){
+  // Add smooth scrolling to all links
+  $("a").on('click', function(event) {
+
+    // Make sure this.hash has a value before overriding default behavior
+    if (this.hash !== "") {
+      // Prevent default anchor click behavior
+      event.preventDefault();
+
+      // Store hash
+      var hash = this.hash;
+
+      // Using jQuery's animate() method to add smooth page scroll
+      // The optional number (800) specifies the number of milliseconds it takes to scroll to the specified area
+      $('html, body').animate({
+        scrollTop: $(hash).offset().top
+      }, 800, function(){
+
+        // Add hash (#) to URL when done scrolling (default click behavior)
+        window.location.hash = hash;
+      });
+    } // End if
+  });
+});
+</script>
+    {% block javascript %}
+    {% endblock %}
+
+
+
+
+    <!-- Footer -->
+   <footer class='text-center footer' style="background-color:#5E0000; padding:8%; color:white;">
+     <p style="color:white!important;"> © 2019 The Claremont Journal of Medicine and Social Justice. </p>
+   <p style="color:white!important;">cjmsj.info@gmail.com</p>
+   </footer>
+
+</html>

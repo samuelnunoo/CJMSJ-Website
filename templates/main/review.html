@@ -1,0 +1,64 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{%  block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/review.css' %}">
+{% endblock stylesheets %}
+
+
+
+    <!-- Main -->
+{% block content %}
+
+   <div class="article-list">
+        <div class="container">
+            <div class="intro">
+                <h2 class="text-center">Articles for Review</h2>
+            </div>
+            <div class="row h-100 justify-content-center align-items-center">
+                {%  for article in articles %}
+                <div class="col-sm-6 col-md-6 item">
+                    <h3 class="name">{{ article.Created }}</h3><a href="{{ article.review_url}}"><img style='width:100%;' class="img-fluid" src="{{ article.Image.url }}"></a>
+                    <h3 class="name">{{ article.Title}}</h3>
+                     <h4 class="text-center" id="main-author" style="font-family:'EB Garamond';"> By
+
+                     {% for author in article.Author.all %}
+
+                         <!-- if only 1 element or first element -->
+                         {% if forloop.first == forloop.last or forloop.counter == 1 %}
+                            <a href="{{ author.page_url}}">{{ author.name}} </a>
+
+                         <!-- If not then -->
+                         {% else  %}
+
+                        <!-- if Last element -->
+                         {%  if forloop.last %}
+
+                             <!-- If only 2 elements -->
+                             {% if forloop.counter == 2 %}
+                                 and <a href="{{ author.page_url}}">{{ author.name}} </a>
+
+                              <!-- If not -->
+                             {% else %}
+
+                                 , and <a href="{{ author.page_url}}">{{ author.name}} </a>
+                             {% endif %}
+
+                         <!-- If not last element -->
+                         {% else %}
+                            {% if forloop.counter > 1 %}
+                                , <a href="{{ author.page_url}}">{{ author.name}} </a>
+                            {% endif %}{% endif %}{% endif %}
+                     {% endfor %}
+                </h4>
+                    <p class="description">{{ article.Description }}</p></div>
+                {% endfor %}
+
+            </div>
+
+
+        </div>
+    </div>
+
+{% endblock content %}
+    

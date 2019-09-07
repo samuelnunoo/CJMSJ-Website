@@ -1,0 +1,790 @@
+
+{% extends "main/layout.html"  %}
+{% load static %}
+
+{%  block stylesheets %}
+   <link rel="stylesheet" href="{% static 'css/cropper.css' %}">
+{%  endblock stylesheets %}
+
+{% block content %}
+
+ <!--     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/css/bootstrap.min.css"> -->
+
+
+
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2" align="center">
+                    <div class="intro">
+                         <h1 id='Title' contenteditable="true" style='font-size:3.5em;' class="text-center">{{ article.Title }}</h1>
+                         <div class="text-center" id="author"> By
+
+                     {% for author in article.Author.all %}
+
+                         <!-- if only 1 element or first element -->
+                         {% if forloop.first == forloop.last or forloop.counter == 1 %}
+                            <a href="{{ author.page_url}}">{{ author.name}} </a>
+
+                         <!-- If not then -->
+                         {% else  %}
+
+                        <!-- if Last element -->
+                         {%  if forloop.last %}
+
+                             <!-- If only 2 elements -->
+                             {% if forloop.counter == 2 %}
+                                 and <a href="{{ author.page_url}}">{{ author.name}} </a>
+
+                              <!-- If not -->
+                             {% else %}
+
+                                 , and <a href="{{ author.page_url}}">{{ author.name}} </a>
+                             {% endif %}
+
+                         <!-- If not last element -->
+                         {% else %}
+                            {% if forloop.counter > 1 %}
+                                , <a href="{{ author.page_url}}">{{ author.name}} </a>
+                            {% endif %}{% endif %}{% endif %}
+                     {% endfor %}
+                </div>
+                            <nav class="nav-scroller py-1 mb-2">
+        <nav class="nav d-flex justify-content-between">
+
+          <a id='Preview' class="p-2 size">Preview</a>
+          <a id='Edit' class="p-2 size" >Edit</a>
+          <a id='Decision' class="p-2 size" >Decision</a>
+
+
+        </nav>
+        <hr>
+      </nav>
+                         <div id="content-section">
+
+                        <form id="post-form" action="" method="POST">
+                            {% csrf_token %}
+
+
+
+
+
+                        <label style='width:100%;' class="label" data-toggle="tooltip" title="" data-original-title="Change the image">
+                            <img style="padding-bottom: 20px; width:100%;" id="avatar" src="{{ article.Image.url }}" alt="avatar">
+                            <input type="file" class="sr-only" id="input" name="image" accept="image/*">
+                        </label>
+                         <div class="text" id="Content">
+                             {{ form.Description }}
+                        {{ form.media }}
+                        {{form.Content}}
+
+                    </div>
+
+                        </form>
+
+                    </div>
+
+                </div>
+
+                <div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="modalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="modalLabel">Crop the image</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">×</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="img-container">
+              <img id="image" src="{% static 'img/beautiful-landscape.jpg' %}">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+            <button type="button" class="btn btn-primary" id="crop">Crop</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+            </div>
+        </div>
+    </div>
+
+
+{%  endblock content  %}
+
+
+<!-- Scripts Here! -->
+{%  block javascript %}
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.bundle.min.js"></script>
+    <script src="{%  static 'js/cropper.js' %}"></script>
+  <!--  <script src="{%  static 'js/jquery.min.js' %}"></script>  -->
+  <!--  <script src="{%  static 'js/crop.js' %}"></script> -->
+<!-- <script src="{% static 'js/submit.js' %}"></script> -->
+
+        <script>
+
+$(window).on('load',function(){
+
+      //Cropper Variables
+
+      var avatar = document.getElementById('avatar');
+      var image = document.getElementById('image');
+      var input = document.getElementById('input');
+      var $alert = $('.alert');
+      var $modal = $('#modal');
+      var cropper;
+
+     $(document).ajaxComplete(function(event,request,settings){
+
+
+      if (settings.url == '/blogs/ajax/edit'){
+
+          avatar = document.getElementById('avatar');
+          image = document.getElementById('image');
+          input = document.getElementById('input');
+          $alert = $('.alert');
+          $modal = $("#modal");
+          $('[data-toggle="tooltip"]').tooltip();
+
+
+      }
+
+     })
+
+      //Input Event
+    $(document).on('change','#input',function(e){
+
+
+	var files = e.target.files;
+	// Assign image
+
+
+    var done = function (url) {
+    	this.value= '';
+      	image.src = url;
+      	$alert.hide();
+      	$modal.modal('show');
+    	};
+
+    var reader;
+    var file;
+    var url;
+
+    if (files && files.length > 0) {
+      file = files[0];
+
+      if (URL) {
+        done(URL.createObjectURL(file));
+      } else if (FileReader) {
+        reader = new FileReader();
+        reader.onload = function (e) {
+          done(reader.result);
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+})
+
+
+
+      //Event when Modal is shown
+  $(document).on('shown.bs.modal','#modal', function () {
+
+
+	cropper = new Cropper(image, {
+          aspectRatio: 1.77777777778,
+          viewMode: 3,
+        });
+
+     //Destroys Cropper after Modal is hidden
+      }).on('hidden.bs.modal', function () {
+        cropper.destroy();
+        cropper = null;
+      });
+
+      // Event when crop button is clicked
+      document.getElementById('crop').addEventListener('click', function () {
+        var initialAvatarURL;
+
+
+        $modal.modal('hide');
+
+        if (cropper) {
+
+          //Gets the cropped image
+          canvas = cropper.getCroppedCanvas({})
+
+
+
+          //Sets var to the image
+          initialAvatarURL = avatar.src;
+          //Passes the type of the original image to preserve image dimensions
+          avatar.src = canvas.toDataURL();
+          //SHows the progress HTML Element
+          //$progress.show();
+
+          //$alert.removeClass('alert-success alert-warning');
+          //This is the compressopion
+
+
+        }
+        ;
+
+      });
+      $('[data-toggle="tooltip"]').tooltip();
+
+      var dialog = bootbox.dialog({
+                                title: 'Your Request is being Processed',
+                                 message: '<p><i class="fa fa-spin fa-spinner"></i> Loading...</p>',
+                                  show: false
+                                    });
+      var Submission = false;
+
+      // Security Stuff  -> Not Needed well for now
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie != '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = jQuery.trim(cookies[i]);
+                // Does this cookie string begin with the name we want?
+                if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+      var csrftoken = getCookie('csrftoken');
+      function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
+      function sameOrigin(url) {
+        // test that a given url is a same-origin URL
+        // url could be relative or scheme relative or absolute
+        var host = document.location.host; // host + port
+        var protocol = document.location.protocol;
+        var sr_origin = '//' + host;
+        var origin = protocol + sr_origin;
+        // Allow absolute or scheme relative URLs to same origin
+        return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+            (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+            // or any other URL that isn't scheme relative or absolute i.e relative.
+            !(/^(\/\/|http:|https:).*/.test(url));
+    }
+
+      //indexedDB Operations
+      function dataURItoBlob(dataURI) {
+  // convert base64 to raw binary data held in a string
+  // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+  var byteString = atob(dataURI.split(',')[1]);
+
+  // separate out the mime component
+  var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+  // write the bytes of the string to an ArrayBuffer
+  var ab = new ArrayBuffer(byteString.length);
+
+  // create a view into the buffer
+  var ia = new Uint8Array(ab);
+
+  // set the bytes of the buffer to the correct values
+  for (var i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+  }
+
+  // write the ArrayBuffer to a blob, and you're done
+  var blob = new Blob([ab], {type: mimeString});
+  return blob;
+
+}
+      function initDB () {
+
+        //Variables
+        window.indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+        window.IDBTransaction = window.IDBTransaction || window.webkitIDBTransaction || window.msIDBTransaction || {READ_WRITE: "readwrite"}; // This line should only be needed if it is needed to support the object's constants for older browsers
+        window.IDBKeyRange = window.IDBKeyRange || window.webkitIDBKeyRange || window.msIDBKeyRange;
+
+
+        //Support Check
+        if (!window.indexedDB) {
+        console.log("Your browser doesn't support a stable version of IndexedDB. Such and such feature will not be available.");
+        }
+
+
+        //Variables
+        let request = window.indexedDB.open("SubmissionDB2",1),
+            db,
+            tx,
+            store,
+            index;
+
+
+        //Initialization
+        request.onupgradeneeded = function(e) {
+            let db = request.result,
+                store = db.createObjectStore("SubmissionStore", {keyPath: "pID"}),
+                index = store.createIndex("pID","pID",{unique: true});
+
+        }
+
+        return request;
+
+   }
+      function saveDB (request,data) {
+
+        //Catch errors
+        request.onerror = function(e){
+            console.log(e.target.errorCode)
+        }
+
+        //Success
+        request.onsuccess = function(e){
+
+            // Variable Initialization
+            db = request.result;
+            tx = db.transaction("SubmissionStore","readwrite")
+            store = tx.objectStore("SubmissionStore")
+            index = store.index("pID")
+
+            //Error Handler
+            db.onerror = function(e){
+                console.log(e.target.errorCode);
+            }
+
+            //Put Data
+            store.put(data)
+
+
+            tx.oncomplete = function() {
+                console.log(" Transaction Complete")
+                db.close();
+                loadPage();
+            }
+        }
+
+    }
+      function loadDB(request,ID,Selectors){
+
+      //Catch errors
+        request.onerror = function(e){
+            console.log(e.target.errorCode)
+        }
+
+        //Success
+        request.onsuccess = function(e){
+
+            // Variable Initialization
+            db = request.result;
+            tx = db.transaction("SubmissionStore","readwrite")
+            store = tx.objectStore("SubmissionStore")
+            index = store.index("pID")
+
+            //Error Handler
+            db.onerror = function(e){
+                console.log(e.target.errorCode);
+            }
+
+            //Get Data
+            var p1 = store.get(ID);
+            p1.onsuccess = function() {
+
+                for (var key in Selectors){
+                    switch(key) {
+                        case 'Image':
+                            console.log(key)
+                            Selectors[key].attr('src',p1.result._Image)
+                            break;
+                        case 'Description':
+                            console.log(key)
+                            Selectors[key].text(p1.result._Description)
+                            break;
+                        case 'Content':
+                            console.log(key)
+                            Selectors[key].html(p1.result._Content)
+                            break;
+                    }
+                }
+
+
+
+
+                    return p1.result
+            }
+
+            tx.oncomplete = function() {
+                db.close();
+            }
+
+
+
+
+        }
+
+
+    }
+      function loadPage() {
+
+            // Get
+            $('#content-section').load("/blogs/ajax/preview",function(){
+
+                var Image = $('.img-fluid');
+                var Content = $('div.text');
+                var Selectors = {"Image":Image,"Content":Content};
+                loadDB(initDB(),1,Selectors)
+
+            })
+
+
+
+    }
+      function loadEdit() {
+
+
+        $("#content-section").load('/blogs/ajax/edit',function(){
+
+            CKEDITOR.on( 'instanceReady', function() {
+
+
+
+                 var Image = $('img#avatar');
+                 var Description = $('#id_Description');
+                 var Content = $('iframe').contents().find('body');
+                 var Selector = {"Image":Image,"Description":Description,"Content":Content}
+                 var data = loadDB(initDB(),1,Selector);
+
+
+
+
+
+            })
+
+            })
+
+
+
+
+        }
+      function sendData(request,ID){
+
+        //Catch errors
+        request.onerror = function(e){
+            console.log(e.target.errorCode)
+        }
+
+        //Success
+        request.onsuccess = function(e){
+
+            // Variable Initialization
+
+            db = request.result;
+            tx = db.transaction("SubmissionStore","readwrite")
+            store = tx.objectStore("SubmissionStore")
+            index = store.index("pID")
+
+            //Error Handler
+            db.onerror = function(e){
+                console.log(e.target.errorCode);
+            }
+
+            //Get Data
+            var p1 = store.get(ID);
+
+            p1.onsuccess = function() {
+
+                var data = p1.result;
+                var formData = new FormData();
+
+                formData.append('Url',location.href);
+                formData.append('Content',data._Content);
+                formData.append('Description',data._Description);
+                formData.append("Title",data._Title);
+
+                //console.log(p1.result)
+
+                try {
+                    canvas.toBlob(function(blob){
+
+                    console.log(blob)
+
+                    formData.append('Image',blob)
+                    console.log(formData)
+
+                    $.ajax('/blogs/ajax/approve', {
+                      method: 'POST',
+                      data:formData,
+                      processData: false,
+                      contentType: false,
+                      beforeSend: function (xhr,settings) {
+
+
+                        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                                // Send the token to same-origin, relative URLs only.
+                                // Send the token only if the method warrants CSRF protection
+                                // Using the CSRFToken value acquired earlier
+                                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                            };
+                        dialog.modal('show');
+
+                      },
+                      complete: function () {
+                          dialog.modal('hide');
+                          location.href = '/blogs/review'
+                      }
+
+
+                  });
+
+
+                    })
+                }
+
+                catch(err){
+                    console.log(err)
+                    console.log(formData)
+                    $.ajax('/blogs/ajax/approve', {
+                      method: 'POST',
+                      data:formData,
+                      processData: false,
+                      contentType: false,
+                      beforeSend: function (xhr,settings) {
+
+
+                        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                                // Send the token to same-origin, relative URLs only.
+                                // Send the token only if the method warrants CSRF protection
+                                // Using the CSRFToken value acquired earlier
+                                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                            };
+                        dialog.modal('show');
+
+                      },
+                      complete: function () {
+                          dialog.modal('hide')
+                          location.href = '/blogs/review'
+
+
+                      }
+
+
+                  });
+
+
+
+                }
+
+
+
+
+
+            }
+
+            tx.oncomplete = function() {
+                db.close();
+            }
+
+
+
+
+        }
+
+      }
+
+
+
+    //Click Events
+    Preview.click(function(){
+
+            //No Repeats
+            if (!isEdit){
+                return false;}
+            isEdit = false
+
+
+            //Grab Edit Variables
+            var Title = $("#Title").text();
+            var Author = $('');
+            var Image = $('img#avatar').attr('src');
+            var Description = $('#id_Description').val();
+            var Content = $('iframe').contents().find('body').html();
+
+
+
+
+            //Save Data
+            var data = { pID:1,  _Title:Title,  _Image:Image,  _Description: Description,  _Content: Content};
+            saveDB(initDB(),data)
+
+
+
+
+
+
+
+        // Move to Preview
+
+
+
+    })
+
+    //Go Back to Edit Page
+    Edit.click(function(){
+
+
+            // No Repeats
+            if (isEdit){
+                return false;
+            }
+
+            //Toggle
+            isEdit = true;
+
+
+            //Reinitiate Variables
+
+
+
+
+
+            //Load Page
+            loadEdit();
+
+
+
+    })
+
+    //Decision
+    Decision.click(function(){
+
+        // Just Popup for Decision
+            bootbox.confirm({
+            message: "Do you approve this article to be apart of the CJMSJ website?",
+            buttons: {
+                confirm: {
+                label: 'Yes',
+                className: 'btn-success'
+            },
+            cancel: {
+                label: "No",
+                className: 'btn-danger'
+            }
+            },
+            callback: function(result) {
+
+                if (result) {
+
+                    // Save to IndexDB if Edit Else Continue
+                    if (isEdit){
+
+                        //Grab Edit Variables
+                        // var Author = $('');
+                        var Title = $('#Title').text()
+                        var Image = $('img#avatar').attr('src');
+                        var Description = $('#id_Description').val();
+                        var Content = $('iframe').contents().find('body').html();
+
+                        //Save Data
+                        var data = { pID:1, _Title:Title, _Image:Image, _Description: Description, _Content: Content};
+                        saveDB(initDB(),data)
+
+                    }
+
+                    // Load Data
+                    sendData(initDB(),1)
+
+
+
+                    // Append Data to
+
+
+
+
+
+
+
+
+
+
+                    //formData []
+
+                    //Ajax
+
+
+                }
+
+                else{
+
+                     var formData = new FormData()
+                     formData.append('Url',location.href)
+
+                     $.ajax('/blogs/ajax/reject', {
+                      method: 'POST',
+                      data:formData,
+                      processData: false,
+                      contentType: false,
+                      beforeSend: function (xhr,settings) {
+                        if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
+                                // Send the token to same-origin, relative URLs only.
+                                // Send the token only if the method warrants CSRF protection
+                                // Using the CSRFToken value acquired earlier
+                                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                            };
+                        dialog.modal('show');
+
+                      },
+                      complete: function () {
+                          dialog.modal('hide');
+                          location.href = '/blogs/review'
+                      }
+
+
+                  });
+                }
+
+
+            }
+
+        })
+
+    })
+
+
+
+
+
+
+
+
+
+
+
+})
+
+
+    //Tabs
+    var Preview = $("#Preview")
+    var Edit = $("#Edit")
+    var Decision = $("#Decision")
+
+    //Toggle
+    var isEdit = true;
+
+
+    // Events
+
+
+
+
+</script>
+    <script>
+
+    </script>
+
+
+{%  endblock javascript %}
+<!---->

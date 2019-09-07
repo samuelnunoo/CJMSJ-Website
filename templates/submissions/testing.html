@@ -1,0 +1,30 @@
+
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="article-clean">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2" align="center">
+                    <div class="intro">
+                        <h1 contenteditable=true style='font-size:3.5em;' class="text-center">{{ form.Title  }}</h1>
+                        <img  id='page_img' class="img-fluid" style="padding-bottom: 20px" src="{{ form.Image}}">
+                    </div>
+                    <div class="text">
+                        {{form.Content| safe}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+!---->
+
+<script>
+
+    $("page_img").click(() => {
+        test;
+    })
+</script>

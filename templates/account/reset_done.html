@@ -1,0 +1,10 @@
+{% extends 'main/layout.html' %}
+
+{% block title %}Password reset complete{% endblock %}
+
+{% block content %}
+    <div class="container" style="padding-top:3em; padding-bottom:10em;" align="center">
+<h1 style="font-size:3em">Password reset complete</h1>
+<p>Your new password has been set. You can log in now on the <a href="{% url 'login' %}">log in page</a>.</p>
+    </div>
+{% endblock %}

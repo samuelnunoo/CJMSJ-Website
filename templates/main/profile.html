@@ -1,0 +1,63 @@
+{% extends "main/layout.html" %}
+{% load static %}
+
+{%  block stylesheets %}
+
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css">
+{% endblock stylesheets %}
+
+
+
+    <!-- Main -->
+{% block content %}
+    <div class="container">
+        <div class="text-center profile-card">
+            
+            <!-- Update This -->
+            <div class="profile-card-img" >
+                <img class="mt-4" src="{{ Author.image.url }}" style="width:15em; height:15em; border-radius:50%;">
+            </div>
+            <div class="mt-3">
+                
+                <!--Name-->
+                <h2>{{Author.name}}</h2>
+                
+                <!-- Biography-->
+                <p style="padding-bottom: 0;padding-top: 5px;">{{Author.bio}}</p>
+            </div>
+        </div>
+    </div>
+
+        <!-- Articles -->
+    {% if Articles %}
+        <div class="container">
+            <div class="cust_bloglistintro">
+                <h1 class="text-center pt-5 pb-3">Articles</h1>
+            </div>
+
+
+            <!-- Iteration --> 
+            <div class="row">
+                {% for Article in Articles %}
+                <div class="col-md-4 cust_blogteaser"><a href="{{Article.page_url}}"><img style="width:100%;" src="{{Article.Image.url}}"></a>
+                    <h3>{{Article.Title}}</h3>
+                    <p class="text-secondary">{{Article.Description}} </p>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+        {% else %}
+        <div style="height:20vh;">
+
+        </div>
+    {% endif %}
+{% endblock content %}
+    
+    
+{% block javascript %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.pack.js"></script>
+<script src="{% static 'js/script.min.js' %}"></script>
+{% endblock javascript %}

@@ -1,0 +1,31 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/target.css' %}">
+    <style>
+    #container-element{
+        background: url("{% static 'img/test1.jpg' %}")
+    }
+    </style>
+{% endblock stylesheets %}
+
+
+{%  block content %}
+    <div class="container-fluid">
+        <div class="row flex-lg-row-reverse mh-100vh">
+            <div id='container-element' class="col-lg-6 d-flex align-items-end mh-50vh" style=" background-size:cover;">
+                <p class="ml-auto small text-white"><em>&nbsp;</em></p>
+            </div>
+            <div class="col-lg-6 d-lg-flex align-items-lg-center text-center px-sm-5 py-5 shadow">
+                <div>
+                    <h1 class="text-secondary font-weight-light">Contact</h1>
+                    <hr class="my-5">
+                    <p class="text-secondary spectral font20"><br>You can contact the Claremont Journal of Medicine and Social Justice team at info.cjmsj@gmail.com.<br><br></p>
+                    <hr class="mt-5 mb-4">
+                   
+                </div>
+            </div>
+        </div>
+    </div>
+{%  endblock content %}

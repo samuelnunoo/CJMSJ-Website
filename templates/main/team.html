@@ -1,0 +1,87 @@
+{%  extends 'main/layout.html' %}
+
+{% block stylesheets %}
+
+    <style>
+
+    .item{
+        margin: 0 auto;
+        width: 20em;
+    }
+
+    .grid{
+        margin: 0 auto;
+    }
+    </style>
+{% endblock stylesheets %}
+
+{%  block content %}
+<div class="team-boxed">
+
+<div class="container" style="background-color:white;">
+
+<h1 style='background-color:white !important; font-size:4.5em;' class="text-center"> Our Team</h1>
+
+<div class="grid" style=" background-color:white; padding: 15vh 0px 15vh 0px;">
+
+{% for person in team  %}
+    <a class=" item" href="{{ person.page_url }}">
+    <div >
+                    <div class="box" style="'background-color:black;">
+                        <img class="rounded-circle profile" src="{{ person.image.url }}">
+                        <h3 class="name">{{ person.name }}</h3>
+                        <p class="title">{{ person.title }}</p>
+                        <p class="description">{{person.bio}}</p>
+                    </div>
+    </div>
+    </a>
+
+
+    {% endfor  %}
+</div>
+
+
+</div>
+</div>
+{% endblock content %}
+
+
+{% block javascript %}
+
+    <script src="https://unpkg.com/masonry-layout@4/dist/masonry.pkgd.min.js"></script>
+    <script>
+
+
+$('.grid').masonry({
+  // options
+  itemSelector: '.item',
+  //percentPosition: true,
+  columnWidth: '.item' ,
+   fitWidth: true,
+
+
+
+});
+
+
+    </script>
+
+{% endblock javascript %}
+<!--style="width: 18rem;"6
+
+
+
+
+<div class="col-6 col-centered">
+    <div class=" card" >
+        <img class="card-img-top "  src="{{ person.image.url }}" alt="Card image cap">
+
+          <div class="card-body">
+            <h5 class="card-title">{{ person.name }}</h5>
+            <p class="card-text" style="white-space:pre-wrap;">{{person.bio}}</p>
+
+          </div>
+    </div>
+    </div>
+
+-->

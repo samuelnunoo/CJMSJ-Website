@@ -1,0 +1,72 @@
+
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block stylesheets %}
+    <style>
+    p{
+        font-size:1.3em;
+    }
+
+    img{
+        max-width: 100%;
+    }
+    </style>
+{% endblock stylesheets %}
+{% block content %}
+  <div class="article-clean">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+                    <div class="intro">
+                        <h1 style='font-size:3.5em;' class="text-center">{{ object.Title }}</h1>
+
+
+
+                        <div class="text-center" id="author"> By
+
+                     {% for author in object.Author.all %}
+
+                         <!-- if only 1 element or first element -->
+                         {% if forloop.first == forloop.last or forloop.counter == 1 %}
+                            <a href="{{ author.page_url}}">{{ author.name}} </a>
+
+                         <!-- If not then -->
+                         {% else  %}
+
+                        <!-- if Last element -->
+                         {%  if forloop.last %}
+
+                             <!-- If only 2 elements -->
+                             {% if forloop.counter == 2 %}
+                                 and <a href="{{ author.page_url}}">{{ author.name}} </a>
+
+                              <!-- If not -->
+                             {% else %}
+
+                                 , and <a href="{{ author.page_url}}">{{ author.name}} </a>
+                             {% endif %}
+
+                         <!-- If not last element -->
+                         {% else %}
+                            {% if forloop.counter > 1 %}
+                                , <a href="{{ author.page_url}}">{{ author.name}} </a>
+                            {% endif %}{% endif %}{% endif %}
+                     {% endfor %}
+                </div>
+                        <p class="text-center" id ='date'>
+                            {{ object.Created|date:"M d, Y"  }}
+                        </p>
+
+                        <img class="img-fluid" style="padding-bottom: 20px; width:100%;" src="{{ object.Image.url}}">
+                    </div>
+                    <div class="text">
+                        {{object.Content | safe}}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+<!---->

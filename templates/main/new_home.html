@@ -1,0 +1,112 @@
+{%  extends 'main/layout.html' %}
+{% load static %}
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{% static 'css/home.css' %}">
+{% endblock stylesheets %}
+
+
+
+{% block content %}
+    <div class="container shadow-lg " style="padding-top: 1em;">
+
+        <div id="main-article">
+            <a href="{{ Featured.page_url }}"><img  id='main-image'  src="{{ Featured.Image.url }}" width="100%"></a>
+            <h1  id='main-title' class=" text-center" style=" font-family: 'EB Garamond';font-weight: bold;">{{ Featured.Title }}</h1>
+
+            <h6 id='main-date' class="text-center" style="padding-top: 0px;font-family: 'EB Garamond';">{{ Featured.Created |date:"M d, Y"  }}</h6>
+
+            <!-- Author Thing -->
+            <h4 class="text-center" id="main-author" style="font-family:'EB Garamond';"> By
+
+                     {% for author in Featured.Author.all %}
+
+                         <!-- if only 1 element or first element -->
+                         {% if forloop.first == forloop.last or forloop.counter == 1 %}
+                            <a href="{{ author.page_url}}">{{ author.name}} </a>
+
+                         <!-- If not then -->
+                         {% else  %}
+
+                        <!-- if Last element -->
+                         {%  if forloop.last %}
+
+                             <!-- If only 2 elements -->
+                             {% if forloop.counter == 2 %}
+                                 and <a href="{{ author.page_url}}">{{ author.name}} </a>
+
+                              <!-- If not -->
+                             {% else %}
+
+                                 , and <a href="{{ author.page_url}}">{{ author.name}} </a>
+                             {% endif %}
+
+                         <!-- If not last element -->
+                         {% else %}
+                            {% if forloop.counter > 1 %}
+                                , <a href="{{ author.page_url}}">{{ author.name}} </a>
+                            {% endif %}{% endif %}{% endif %}
+                     {% endfor %}
+                </h4>
+
+            <h5 id='main-description' class="text-center"
+                style="color: grey;padding-bottom: 50px;font-family: 'EB Garamond';">{{ Featured.Description }}</h5>
+        </div>
+
+
+        <div>
+            <div class="container">
+                <h2 style="margin-top:52px;margin-left:34px;font-family: 'EB Garamond';font-size:22px;font-weight:800;line-height:32px;color:rgb(0,0,0);">Recent</h2>
+                <div class="cust_bloglistintro">
+                    <p style="margin-left:34px;color:rgba(255,255,255,0.5);font-size:14px;"></p>
+                </div>
+
+                <div class="row">
+                    {% for article in Query %}
+                    <div class="col-md-4 cust_blogteaser" style="padding-bottom:20px;margin-bottom:32px;"><a href="{{ article.page_url }}"><img width='100%' style="height:auto;" src="{{ article.Image.url }}"></a>
+                        <h4 class="text-center" style="text-align:left;margin-top:20px; font-family:'EB Garamond'; font-style:normal;font-weight:bold;">{{ article.Title }}</h4>
+                        <h6 style="color:grey; font-style:italic;font-family:'EB Garamond';"> {{ article.Created |date:"M d, Y"  }}</h6>
+                        <h6  id="author" style="font-family:'EB Garamond';"> By
+
+                     {% for author in article.Author.all %}
+
+                         <!-- if only 1 element or first element -->
+                         {% if forloop.first == forloop.last or forloop.counter == 1 %}
+                            <a href="{{ author.page_url}}">{{ author.name}} </a>
+
+                         <!-- If not then -->
+                         {% else  %}
+
+                        <!-- if Last element -->
+                         {%  if forloop.last %}
+
+                             <!-- If only 2 elements -->
+                             {% if forloop.counter == 2 %}
+                                 and <a href="{{ author.page_url}}">{{ author.name}} </a>
+
+                              <!-- If not -->
+                             {% else %}
+
+                                 , and <a href="{{ author.page_url}}">{{ author.name}} </a>
+                             {% endif %}
+
+                         <!-- If not last element -->
+                         {% else %}
+                            {% if forloop.counter > 1 %}
+                                , <a href="{{ author.page_url}}">{{ author.name}} </a>
+                            {% endif %}{% endif %}{% endif %}
+                     {% endfor %}
+                </h6>
+
+                        <p class="text-secondary" style=" font-family:'EB Garamond';text-align:left;font-size:14px;line-height:22px;color:rgb(9,9,10);margin-left:24px;">{{ article.Description }} </p></div>
+                    {%  endfor  %}
+
+
+
+                </div>
+            </div>
+        </div>
+        <div>
+
+        </div>
+    </div>
+{% endblock content %}

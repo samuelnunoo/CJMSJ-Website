@@ -1,0 +1,119 @@
+
+{% extends "main/layout.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="article-clean">
+   <div class="row">
+                <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2">
+                    <div class="intro">
+                        <h1 style='font-size:3.5em;' class="text-center">{{ object.Title }}</h1>
+
+
+
+                        <p class="text-center">
+
+
+
+
+                            <span class="date"> <br> {{ object.Created|date:"M d, Y"  }}</span></p>
+                        <img class="img-fluid" style="padding-bottom: 20px; width:100%;" src="{{ object.Image.url}}">
+                    </div>
+                    <div class="text">
+                        {{object.Content | safe}}
+                    </div>
+                </div>
+            </div>
+    </div>
+<!---->
+{% endblock content %}
+
+{%  block javascript %}
+    <script>
+var Preview = $("#Preview")
+var Edit = $("#Edit")
+var Decision = $("#Decision")
+
+Preview.click(function(){
+
+    // Prompt for Save
+    console.log("Started")
+    bootbox.confirm({
+        message: "Update blog info before preview?",
+
+        buttons: {
+            confirm: {
+            label: 'Yes',
+            className: 'btn-success'
+        },
+        cancel: {
+            label: "No",
+            className: 'btn-danger'
+        }
+        },
+
+        callback: function(result) {
+            if (result) {
+                //ajax
+                console.log("OK")
+            }
+            location.href = "{{ object.preview_url }}"
+
+        }
+
+    })
+
+    // Move to Preview
+
+
+
+})
+
+
+Edit.click(function(){
+
+
+    // Move to Edit Page
+    if (location.href !== 'http://127.0.0.1:8000{{object.review_url }}'){
+        location.href = '{{ object.review_url }}'
+
+    }
+
+
+
+})
+
+
+Decision.click(function(){
+
+    // Just Popup for Decision
+        bootbox.confirm({
+        message: "Do you approve this article to be apart of the CJMSJ website?",
+        buttons: {
+            confirm: {
+            label: 'Yes',
+            className: 'btn-success'
+        },
+        cancel: {
+            label: "No",
+            className: 'btn-danger'
+        }
+        },
+        callback: function(result) {
+            if (result) {
+                //Approved Ajax
+            }
+
+
+        }
+
+    })
+
+})
+
+
+
+
+</script>
+
+{% endblock javascript %}

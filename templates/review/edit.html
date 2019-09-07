@@ -1,0 +1,20 @@
+
+ <form id="post-form" action="" method="POST">
+                            {% csrf_token %}
+
+
+
+                        <p class="text-center"> <a href="">  </a><span class="date"> </span></p>
+
+                        <label style='width:100%;' class="label" data-toggle="tooltip" title="" data-original-title="Change the image">
+                            <img style="padding-bottom: 20px; width:100%;" id="avatar" src="" alt="avatar">
+                            <input type="file" class="sr-only" id="input" name="image" accept="image/*">
+                        </label>
+                         <div class="text" id="Content">
+                             {{ form.Description }}
+                        {{ form.media }}
+                        {{form.Content}}
+
+                    </div>
+
+                        </form>

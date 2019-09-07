@@ -1,0 +1,34 @@
+{% extends 'main/layout.html' %}
+{% load static %}
+<!-- Updated -->
+{% block stylesheets %}
+<link rel="stylesheet" href="{% static 'css/target.css' %}">
+    <style>
+    #container-element{
+        background: url("{% static 'img/test1.jpg' %}")
+    }
+    </style>
+{% endblock stylesheets %}
+
+
+{%  block content %}
+    <div class="container-fluid">
+        <div class="row flex-lg-row-reverse mh-100vh">
+            <div id='container-element' class="col-lg-6 d-flex align-items-end mh-50vh" style=" background-size:cover;">
+                <p class="ml-auto small text-white"><em>&nbsp;</em></p>
+            </div>
+            <div class="col-lg-6 d-lg-flex align-items-lg-center text-center px-sm-5 py-5 shadow">
+                <div>
+                    <h1 class="text-secondary font-weight-light">About</h1>
+                    <hr class="my-5">
+                    <p class="text-secondary spectral font20"><br>The Claremont Journal of Medicine and Social Justice is a 5C organization formed to raise awareness around both global and local intersectional issues in medicine and public health in a socially conscious way. Articles will be
+                        published both digitally on our website and in a biannual print edition. All 5C students are welcome to be a team member. The current positions we are looking for interested students to fill: global content editor, global content
+                        writer, local content editor, local content writer, and finance team member. There will be full team meetings every other Wednesday from 9-10 at SOCA Lounge. If you are interested in joining the team or learning more about the
+                        journal please contact info.cjmsj@gmail.com.<br><br></p>
+                    <hr class="mt-5 mb-4">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{%  endblock content %}

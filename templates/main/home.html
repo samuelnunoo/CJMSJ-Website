@@ -1,0 +1,203 @@
+
+{% extends 'main/layout.html' %}
+
+{%  load static  %}
+{% block content %}
+   <div class="fluid-container">
+    <div class="row masonry-grid no-gutters ">
+
+      <div class='col-md-3'>
+
+               <div class="card">
+              <img class="card-img-top" src="{{ l_img.Image.url }}" alt="Card image cap">
+             <div class="card-body">
+
+                <a href='{{ l_img.page_url }}' >
+                <h3 class="card-text text-left side-font" >{{ l_img.Title }}</h3>
+                </a>
+                <p class='text-left description-font' > {{ l_img.Description }}</p>
+                <p style='font-family:times; font-size:1.5vw; ' class='text-center'> By:
+                <a id='author' class='text-center author-font' href='' > Default for Now </a>
+                </p>
+
+
+
+
+
+  </div>
+</div>
+
+                <div class="card">
+
+             <div class="card-body">
+
+                <a href='{{ l_reg1.page_url }}' >
+                <h3 class="card-text side-font text-left" >{{ l_reg1.Title }}</h3>
+                </a>
+                <p class=' description-font text-left' > {{ l_reg1.Description }} </p>
+                <p style='font-family:times; font-size:1.5vw; ' class='text-center'> By:
+                <a id='author' class='text-left author-font' href='' > Default for Now </a>
+                </p>
+
+
+
+
+
+              </div>
+            </div>
+         <div class="card">
+
+ <div class="card-body">
+
+    <a href='{{ l_reg2.page_url }}' >
+    <h3 class="card-text side-font text-left" >{{ l_reg2.Title }}</h3>
+    </a>
+    <p class=' description-font text-left' > {{ l_reg2.Description }}</p>
+    <p style='font-family:times; font-size:1.5vw; ' class='text-center'> By:
+    <a id='author' class='text-left author-font' href='' > Default for Now </a>
+    </p>
+
+
+
+
+
+  </div>
+</div>
+      </div>
+
+
+
+
+
+
+         <div class='col-md-6'>
+             <div class="card">
+  <img class="card-img-top" src="{{ c_top.Image.url }}" alt="Card image cap">
+
+ <div class="card-body">
+
+    <a href='{{ c_top.page_url}}' >
+    <h3 class="card-text text-center title-font" >{{c_top.Title}}</h3>
+    </a>
+    <p class='text-center description-font' > {{ c_top.Description }} </p>
+    <p style='font-family:times; font-size:1.5vw; ' class='text-center'> By:
+    <a id='author' class='text-center author-font' href='' > Default for Now </a>
+    </p>
+
+
+
+
+
+  </div>
+</div>
+
+           <div class="card bg-dark text-white">
+               <a href="{{ c_bottom.page_url }}" style="color:white !important;">
+  <img class="card-img" src="{{ c_bottom.Image.url }}" alt="Card image">
+
+  <div class="card-img-overlay" style="background-color:black !important; opacity:0.4;">
+    <h5 class="card-title" style="opacity:1 !important;">{{ c_bottom.Title }}</h5>
+    <p class="card-text"  style="opacity:1 !important;">{{ c_bottom.Description }}</p>
+    <p class="card-text">Default for now</p>
+  </div>
+               </a>
+</div>
+
+
+
+        <div class="w-100"></div>
+
+
+
+
+
+
+
+
+      </div>
+
+
+
+
+
+
+         <div class='col-md-3'>
+             <div class="card">
+                <img class="card-img-top" src="{{ r_img.Image.url }}" alt="Card image cap">
+                    <div class="card-body">
+                        <a href='{{ r_img.page_url }}' >
+                            <h3 class="card-text text-right side-font" >{{ r_img.Title }}</h3>
+                                                            </a>
+                                     <p class='text-right description-font' >{{ r_img.Description }}</p>
+                                          <p style='font-family:times; font-size:1.5vw; ' class='text-center'> By:
+                                                 <a id='author' class='text-center author-font' href='' > Default for Now </a>
+                                                        </p>
+
+
+
+
+
+  </div>
+</div>
+            <div class="c
+            ard">
+
+            <div class="card-body">
+
+    <a href='{{ r_reg1.page_url }}' >
+    <h3 class="card-text side-font text-right" >{{ r_reg1.Title }}</h3>
+    </a>
+    <p class=' description-font text-right' > {{ r_reg1.Description }}</p>
+    <p style='font-family:times; font-size:1.5vw; ' class='text-center'> By:
+    <a id='author' class='text-left author-font' href='' > Default for now </a>
+    </p>
+
+
+
+
+
+  </div>
+            </div>
+                <div class="card">
+
+             <div class="card-body">
+
+    <a href='{{ r_reg2.page_url }}' >
+    <h3 class="card-text side-font text-right" >{{ r_reg2.Title }}</h3>
+    </a>
+    <p class=' description-font text-right' > {{ r_reg2.Description }} </p>
+    <p style='font-family:times; font-size:1.5vw; ' class='text-center'> By:
+    <a id='author' class='text-left author-font' href='' > Default for now </a>
+    </p>
+
+
+
+
+
+  </div>
+
+</div>
+      </div>
+
+
+
+  </div>
+   <div class="'row align-center">
+       {%  for blog in blogs %}
+           <div class="card" >
+  <div class="card-body">
+    <a href=''> <h5 class="card-title text-center" style='color:black !important;'>{{ blog.Title }}</h5></a>
+
+   <p class="card-text text-center">{{ blog.Description }}</p>
+
+  </div>
+</div>
+
+
+        {% endfor %}
+   </div>
+
+
+   </div>
+
+{% endblock content%}

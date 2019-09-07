@@ -1,0 +1,19 @@
+  <div class="article-clean">
+      <div class="row">
+          <div class="intro">
+
+
+
+
+                        <p class="text-center">
+
+
+
+                            <span class="date"> <br> {{ object.Created|date:"M d, Y"  }}</span></p>
+                        <img width="100%", class="img-fluid" style="padding-bottom: 20px; width:100%;" src="{{ object.Image.url}}">
+                    </div>
+          <div class="text">
+                        {{object.Content | safe}}
+                    </div>
+      </div>
+</div>
