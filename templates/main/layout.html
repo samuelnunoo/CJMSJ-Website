@@ -16,6 +16,52 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <link rel="stylesheet" type="text/css" href="{% static 'css/main.css' %}">
     <link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.min.css' %}" >
+    <style>
+
+        .navbar.center .navbar-inner {
+    text-align: center;
+}
+
+.navbar.center .navbar-inner .nav {
+    display:inline-block;
+    float: none;
+    vertical-align: top;
+}
+
+        .mobile{
+            display: none;
+        }
+
+        .desktop {
+            display: none;
+        }
+        @media (min-width: 993px){
+
+            .desktop {
+                display: inline;
+            }
+
+            .mobile {
+                display: none;
+            }
+
+        }
+
+
+        @media (max-width: 992px) {
+            .mobile{
+                display:inline;
+            }
+
+            .desktop{
+                display:none;
+            }
+
+            .shadow-lg{
+
+            }
+        }
+    </style>
 
     {% block stylesheets %}
     {% endblock stylesheets %}
