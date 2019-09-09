@@ -18,6 +18,7 @@ from django.shortcuts import render, redirect,get_object_or_404
 from blogs.models import Post
 from .forms import ProfileForm
 from django.http import JsonResponse
+from .models import Account
 
 
 
@@ -46,37 +47,32 @@ def activate(request, uidb64, token):
     else:
         return render(request, 'account/account_activation_invalid.html')
 
+
+
 def signup(request):
-    query = request.GET.get('q')
-    if query:
-        print(query)
-        return redirect('/blogs/?q={}'.format(query))
+
+    #Method Check
     if request.method =='POST':
-        print("OK IT POSTED")
-        form=SignUpForm(request.POST)
+
+        #Fill form fields
+        email = request.POST.get("email")
+        password1 = request.POST.get('password1')
+        password2 = request.POST.get('password2')
+        form = SignUpForm(email=email, password1=password1, password2=password2)
+
         if form.is_valid():
             try:
-                print("OK IT VALID")
-                user_=form.save(commit=False)
-                user_.is_active=False
-                print('tep 2')
+
+                user_ = form.save(commit=False)
+                user_.is_active = False
+
                 #User.objects.create(**form.cleaned_data)
                 user_.save()
                
                 current_site=get_current_site(request)
 
 
-
-
-
-
-
-
-
-
-
                 subject ='Activate your CJMSJ.org Account'
-                print(subject)
                 message=render_to_string('account/account_activation_email.html',
                                          {
                                              'user':user_,
@@ -87,11 +83,7 @@ def signup(request):
 
 
                                           })
-                print(message)
-                print('OK IT TRIED TO SEND')
                 host=settings.EMAIL_HOST_USER
-
-               #user_.email_user(subject,message,)
                 send_mail(subject,message=message,from_email=host,recipient_list=[user_.email])
                 print("first one:",host,user_.email)
                 return redirect('users:account_activation_sent')
@@ -106,6 +98,15 @@ def signup(request):
     else:
         form=SignUpForm()
         return render(request, 'account/signup.html/', {"form":form})
+
+def email(request):
+    email = request.POST.get('email')
+    email_exists = get_object_or_404(Account, email=email)
+    if email_exists:
+        return JsonResponse({'email':True})
+
+    else:
+        return JsonResponse({"email":False})
 
 def team(request):
     query = request.GET.get('q')
