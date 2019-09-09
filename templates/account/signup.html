@@ -96,21 +96,21 @@
 
 
         var Button = $("#form > button");
+        var Email = $('#id_email');
+        var Password1 = $("#id_password1");
+        var Password2 = $("#id_password2");
 
         //Click Event
         Button.click(function(){
 
-            //Selectors
-            var Email = $('#id_email').val();
-            var Password1 = $("#id_password1").val();
-            var Password2 = $("#id_password2").val();
+
+
 
             //add formData
             var formData = new FormData()
-
-            formData.append('email',Email);
-            formData.append('password1',Password1);
-            formData.append('password2',Password2);
+            formData.append('email',Email.val());
+            formData.append('password1',Password1.val());
+            formData.append('password2',Password2.val());
 
 
              $.ajax('/ajax/signup/', {
