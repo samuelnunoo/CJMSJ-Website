@@ -48,13 +48,10 @@ def activate(request, uidb64, token):
         return render(request, 'account/account_activation_invalid.html')
 
 
+def signup_ajax(request):
+    if request.method == 'POST':
 
-def signup(request):
-
-    #Method Check
-    if request.method =='POST':
-
-        #Fill form fields
+        # Fill form fields
         email = request.POST.get("email")
         password1 = request.POST.get('password1')
         password2 = request.POST.get('password2')
@@ -66,38 +63,36 @@ def signup(request):
                 user_ = form.save(commit=False)
                 user_.is_active = False
 
-                #User.objects.create(**form.cleaned_data)
+                # User.objects.create(**form.cleaned_data)
                 user_.save()
-               
-                current_site=get_current_site(request)
 
+                current_site = get_current_site(request)
 
-                subject ='Activate your CJMSJ.org Account'
-                message=render_to_string('account/account_activation_email.html',
-                                         {
-                                             'user':user_,
-                                             'domain': current_site.domain,
-                                             'uid': urlsafe_base64_encode(force_bytes(user_.pk)),
-                                             'token': account_activation_token.make_token(user_),
+                subject = 'Activate your CJMSJ.org Account'
+                message = render_to_string('account/account_activation_email.html',
+                                           {
+                                               'user': user_,
+                                               'domain': current_site.domain,
+                                               'uid': urlsafe_base64_encode(force_bytes(user_.pk)),
+                                               'token': account_activation_token.make_token(user_),
 
-
-
-                                          })
-                host=settings.EMAIL_HOST_USER
-                send_mail(subject,message=message,from_email=host,recipient_list=[user_.email])
-                print("first one:",host,user_.email)
+                                           })
+                host = settings.EMAIL_HOST_USER
+                send_mail(subject, message=message, from_email=host, recipient_list=[user_.email])
+                print("first one:", host, user_.email)
                 return redirect('users:account_activation_sent')
             except Exception as e:
                 print(e)
-                return redirect ('users:invalid')
+                return redirect('users:invalid')
 
         else:
 
-            return redirect ('users:invalid')
+            return redirect('users:invalid')
 
-    else:
-        form=SignUpForm()
-        return render(request, 'account/signup.html/', {"form":form})
+def signup(request):
+
+    form=SignUpForm()
+    return render(request, 'account/signup.html/', {"form":form})
 
 def email(request):
     email = request.POST.get('email')

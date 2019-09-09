@@ -25,7 +25,7 @@ from blogs.views import submit, authorized
 from submissions.views import ProfileAutocomplete
 from django.contrib.auth import views as auth_views
 
-from users.views import signup, email
+from users.views import signup_ajax, email
 urlpatterns = [
 
 
@@ -47,7 +47,7 @@ urlpatterns = [
     path('ajax/authorized',authorized, name='authorized'),
     path('profile-autocomplete', ProfileAutocomplete.as_view(),name='profile-autocomplete'),
     path('ajax/profile',update_profile, name='update_profile'),
-    path('/ajax/signup/',signup),
+    path('/ajax/signup/',signup_ajax),
     path('/ajax/email/',email),
 
     # Password Reset
