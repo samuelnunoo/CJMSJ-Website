@@ -120,6 +120,9 @@
                           contentType: false,
                           beforeSend: function (xhr,settings) {
 
+                              //Before
+                              console.log("Before AJax")
+
                             // Check for CSRF
                             if (!csrfSafeMethod(settings.type) && sameOrigin(settings.url)) {
                                     // Send the token to same-origin, relative URLs only.
