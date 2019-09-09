@@ -95,8 +95,8 @@ def signup(request):
                 send_mail(subject,message=message,from_email=host,recipient_list=[user_.email])
                 print("first one:",host,user_.email)
                 return redirect('users:account_activation_sent')
-            except:
-
+            except Exception as e:
+                print(e)
                 return redirect ('users:invalid')
 
         else:
