@@ -133,7 +133,7 @@
 
 
                             // Check for Matching Passwords
-                            console.log(Password1.val(),Password2.val())
+                            console.log(Password1.val(),Password2.val());
                             if (Password1.val()!==Password2.val()){
 
                                 //Alert User
@@ -150,7 +150,7 @@
                                 return false;
                             }
 
-
+                            console.log("Before getJSON");
                             // Check if Email is in Use
                             $.getJSON('/ajax/email', {email:Email})
                                 .done(function(result){
