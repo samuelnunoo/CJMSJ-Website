@@ -113,8 +113,24 @@
             formData.append('password1',Password1.val());
             formData.append('password2',Password2.val());
 
+            $.getJSON('/ajax/email', {email:Email}, function(result){
+;                                    console.log(result);
+                                if (result['email']){
 
-             $.ajax('/ajax/signup/', {
+                                    //Alert User
+                                    bootbox.alert("Email is already in use",function(){
+
+                                        //Change Outline
+                                        Email.addClass('btn-outline-danger');
+
+                                            });
+
+                                    //Return False -- Error
+                                    return false;
+                                }
+
+                                else {
+                                     $.ajax('/ajax/signup/', {
                           method: 'POST',
                           data: formData,
                           processData: false,
@@ -151,25 +167,8 @@
                                 return false;
                             }
 
-                            console.log("Before getJSON");
-                            // Check if Email is in Use
-                            $.getJSON('/ajax/email', {email:Email})
-                                .done(function(result){
-;                                    console.log(result);
-                                if (result['email']){
 
-                                    //Alert User
-                                    bootbox.alert("Email is already in use",function(){
 
-                                        //Change Outline
-                                        Email.addClass('btn-outline-danger');
-
-                                            });
-
-                                    //Return False -- Error
-                                    return false;
-                                }
-                            })
 
 
 
@@ -183,6 +182,12 @@
 
 
                       });
+                                }
+                            })
+
+
+
+
         })
 
 
