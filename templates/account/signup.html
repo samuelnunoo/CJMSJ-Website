@@ -113,7 +113,7 @@
             formData.append('password1',Password1.val());
             formData.append('password2',Password2.val());
 
-            $.getJSON('/ajax/email', {email:Email}, function(result){
+            $.getJSON('/ajax/email/', {email:Email.val()}, function(result){
 ;                                    console.log(result);
                                 if (result['email']){
 

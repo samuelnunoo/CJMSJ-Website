@@ -95,12 +95,16 @@ def signup(request):
     return render(request, 'account/signup.html/', {"form":form})
 
 def email(request):
+
     email = request.POST.get('email')
+    print(email)
     email_exists = get_object_or_404(Account, email=email)
     if email_exists:
+        print("Exists")
         return JsonResponse({'email':True})
 
     else:
+        print("Not Exists")
         return JsonResponse({"email":False})
 
 def team(request):
