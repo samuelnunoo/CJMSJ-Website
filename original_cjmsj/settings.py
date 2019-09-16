@@ -91,6 +91,7 @@ INSTALLED_APPS = [
     'ckeditor',
     'django.contrib.postgres',
     'easy_pjax',
+    'parsley',
 
 
 ]

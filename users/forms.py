@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, AuthenticationForm
 from django.contrib.auth import get_user_model
 from .models import Profile
+from parsley.decorators import parsleyfy
 
 
 from .models import Account, Profile
@@ -12,11 +13,11 @@ class LoginForm(AuthenticationForm):
 
 
 
-
+@parsleyfy #For Client-Side Form Validation
 class SignUpForm(UserCreationForm):
     email=forms.EmailField(max_length=50,required=True,widget=forms.TextInput(attrs={'class':'form-control'}))
-    password1 = forms.CharField(label="",widget=forms.TextInput(attrs={'class':'form-control','type':'password'}))
-    password2 = forms.CharField(label="",widget=forms.TextInput(attrs={'class':'form-control','type':'password'}))
+    password1 = forms.CharField(required=True, min_length=8, label="",widget=forms.TextInput(attrs={'class':'form-control','type':'password'}))
+    password2 = forms.CharField(required=True, min_length=8, label="",widget=forms.TextInput(attrs={'class':'form-control','type':'password'}))
 
     class Meta:
         model=Account
