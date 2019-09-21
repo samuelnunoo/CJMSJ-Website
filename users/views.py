@@ -48,14 +48,9 @@ def activate(request, uidb64, token):
         return render(request, 'account/account_activation_invalid.html')
 
 
-def signup_ajax(request):
+def signup(request):
     if request.method == 'POST':
-
-        # Fill form fields
-        email = request.POST.get("email")
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        form = SignUpForm(email=email, password1=password1, password2=password2)
+        form = SignUpForm(request.POST)
 
         if form.is_valid():
             try:
@@ -89,10 +84,11 @@ def signup_ajax(request):
 
             return redirect('users:invalid')
 
-def signup(request):
+    else:
+        form = SignUpForm()
+        return render(request, 'account/signup.html/', {"form": form})
 
-    form=SignUpForm()
-    return render(request, 'account/signup.html/', {"form":form})
+
 
 def email(request):
 
