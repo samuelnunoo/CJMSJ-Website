@@ -51,7 +51,7 @@ urlpatterns = [
     path('ajax/profile',update_profile, name='update_profile'),
     path('ajax/email/', email , name='email'),
 
-    # Password Reset
+    # Password Resetn
     path('password_reset/',auth_views.PasswordResetView.as_view(template_name='account/forgot_password.html'), name ='password_reset'),
     #path('password_reset/',auth_views.PasswordResetConfirmView.as_view(template_name='account/email_sent.html'), name = 'password_reset_confirm'),
     path('password_reset/done',auth_views.PasswordResetDoneView.as_view(template_name='account/email_sent.html'), name='password_reset_done'),

@@ -234,14 +234,19 @@
            var Selections = document.querySelectorAll('.select2-selection__choice');
            var Authors = [];
 
-           Selections.forEach(function(element){
-                console.log(element.getAttribute("Title"))
-                Authors.push(element.getAttribute("Title"))
-            })
+           $.getJSON('/ajax/authorized', function(data){
+                                if (data['sign-up']) {
+                                    console.log("sign up");
+                                    bootbox.alert("Please Sign-Up",function(){
+                                    location.href='/users/signup/';
 
 
+                                        });
 
-          try {
+                                         }
+                                else{
+
+                                         try {
               canvas.toBlob(function (blob) {
 
                   // Initalizing FormData object
@@ -279,17 +284,6 @@
                                 xhr.setRequestHeader("X-CSRFToken", csrftoken);
                             }
 
-
-                          $.getJSON('/ajax/authorized', function(data){
-                                if (data['sign-up']){
-                                    console.log("sign up");
-                                    bootbox.alert("Please Sign-Up",function(){
-                                    location.href='/users/signup/';
-                                        });
-
-                                         }
-
-                                });
 
                         if (Authors.length < 1) {
                              bootbox.alert("Please add Authors to your Submission",function(){
@@ -348,8 +342,7 @@
                   });
               });
           }
-
-          catch(err) {
+                                         catch(err) {
               // Move to Object
 
               bootbox.alert("Please provide a valid Image",function(){
@@ -357,6 +350,20 @@
 
               });
           }
+
+                                }
+
+                                });
+
+
+           Selections.forEach(function(element){
+                console.log(element.getAttribute("Title"))
+                Authors.push(element.getAttribute("Title"))
+            })
+
+
+
+
 
 
 
