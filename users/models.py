@@ -96,6 +96,9 @@ class Profile(models.Model):
     title=models.CharField(default='User',max_length=24)
     staff=models.BooleanField(default=False)
 
+    #For Filtering of Users
+    complete = models.BooleanField(default=False)
+
 
 
     def page_url(self):

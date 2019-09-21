@@ -20,7 +20,7 @@
 
 
           <!-- Form Stuff -->
-        <form method="POST"  enctype="multipart/form-data" id="form">
+        <form data-parsley-validate method="POST"  enctype="multipart/form-data" id="form">
             {% csrf_token %}
           <div class="form-group">
             <label class="text-secondary">Email</label>
@@ -52,4 +52,27 @@
 
 {% block javascript %}
 <script src="{% static 'js/parsley.min.js' %}"></script>
+    <script>
+$(document).ready(function(){
+      var Email = $("#id_email");
+
+    // Email Validators
+
+    Email.attr('data-parsley-remote','');
+    Email.attr('data-parsley-remote-validator','email');
+    Email.attr('data-parsley-remote-message','Email is already in use');
+
+    //
+    window.Parsley.addAsyncValidator('email',function (xhr) {
+
+        var response = xhr.responseJSON['Result'];
+        return response ;
+
+    },  '/ajax/email')
+
+
+}
+)
+
+    </script>
 {% endblock javascript %}

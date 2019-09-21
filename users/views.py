@@ -43,19 +43,16 @@ def activate(request, uidb64, token):
         user.profile.email_confirmed= True
         user.save()
         login(request,user)
-        return redirect('/blogs')
+
+        #So they can Update Their Profile
+        return redirect('/users/profile/')
     else:
         return render(request, 'account/account_activation_invalid.html')
 
 
-def signup_ajax(request):
+def signup(request):
     if request.method == 'POST':
-
-        # Fill form fields
-        email = request.POST.get("email")
-        password1 = request.POST.get('password1')
-        password2 = request.POST.get('password2')
-        form = SignUpForm(email=email, password1=password1, password2=password2)
+        form = SignUpForm(request.POST)
 
         if form.is_valid():
             try:
@@ -89,23 +86,29 @@ def signup_ajax(request):
 
             return redirect('users:invalid')
 
-def signup(request):
+    else:
+        form = SignUpForm()
+        return render(request, 'account/signup.html/', {"form": form})
 
-    form=SignUpForm()
-    return render(request, 'account/signup.html/', {"form":form})
+
 
 def email(request):
 
-    email = request.POST.get('email')
-    print(email)
-    email_exists = get_object_or_404(Account, email=email)
-    if email_exists:
-        print("Exists")
-        return JsonResponse({'email':True})
+    email = request.GET.get('email')
+    try:
+        get_object_or_404(Account, email=email)
+        data = {'Result':False}
+        return JsonResponse(data)
 
-    else:
-        print("Not Exists")
-        return JsonResponse({"email":False})
+    except:
+        print("Not Found")
+        data = {'Result':True}
+        return JsonResponse(data)
+
+
+
+
+
 
 def team(request):
     query = request.GET.get('q')
@@ -158,6 +161,8 @@ def user_profile(request):
             print('2')
             user=get_object_or_404(Profile,user=request.user)
             form=ProfileForm(initial={'first_name':user.first_name,'last_name':user.last_name,'bio':user.bio})
+
+
             context = {
                 #'user':user,
                 "form":form,
@@ -194,6 +199,7 @@ def update_profile(request):
             user.first_name = first_Name
             user.last_name = last_Name
             user.bio = biography
+            user.complete = True
             user.save()
             return render(request, 'main/about.html', {})
 

@@ -12,6 +12,7 @@
 
    <div class="article-list">
         <div class="container">
+            {%  if articles  %}
             <div class="intro">
                 <h2 class="text-center">Articles for Review</h2>
             </div>
@@ -55,6 +56,9 @@
                 {% endfor %}
 
             </div>
+        {%  else %}
+            <h1 class="text-center"> No Articles for Review </h1>
+        {% endif  %}
 
 
         </div>

@@ -1,5 +1,4 @@
-
-window.addEventListener('DOMContentLoaded', function () {
+ window.addEventListener('DOMContentLoaded', function () {
 
 
 
@@ -92,8 +91,10 @@ window.addEventListener('DOMContentLoaded', function () {
               done(reader.result);
             };
             reader.readAsDataURL(file);
-            Updated = true;
+
           }
+            Updated = true;
+            console.log(Updated)
         }
       });
 
@@ -156,6 +157,7 @@ window.addEventListener('DOMContentLoaded', function () {
           var updateImage = ( Image_Check === 'https://cjmsj.s3.amazonaws.com/media/pictures/default.jpg' || Updated === true)
 
           if (updateImage){
+              console.log("IMage")
 
 
               try {
@@ -277,6 +279,7 @@ window.addEventListener('DOMContentLoaded', function () {
           }
 
           else{
+              console.log("NO Image")
 
                  //Dataset
               formData_.append('first_name', first_name);

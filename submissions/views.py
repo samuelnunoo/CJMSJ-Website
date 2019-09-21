@@ -11,7 +11,7 @@ class ProfileAutocomplete(autocomplete.Select2QuerySetView):
         if not self.request.user.is_authenticated:
             return Profile.objects.none()
 
-        qs = Profile.objects.all()
+        qs = Profile.objects.all().filter(complete=True).filter(email_confirmed=True)
         print(qs)
 
 

@@ -18,7 +18,7 @@ class PostForm(forms.ModelForm):
     width = forms.FloatField(widget=forms.HiddenInput())
     height = forms.FloatField(widget=forms.HiddenInput())
     '''
-    Profiles = forms.ModelChoiceField(queryset=Profile.objects.all(),
+    Profiles = forms.ModelChoiceField(queryset=Profile.objects.all().filter(complete=True).filter(email_confirmed=True),
                                       widget=autocomplete.ModelSelect2Multiple(url='profile-autocomplete'))
 
     class Meta:
@@ -39,18 +39,4 @@ class PostForm(forms.ModelForm):
 
 
 
-    '''def save(self):
-        form=super(PostForm,self).save()
-
-       x = self.cleaned_data.get('x')
-        y = self.cleaned_data.get('y')
-        w = self.cleaned_data.get('width')
-        h = self.cleaned_data.get('height')
-                                            
-        image=Image.open(form.Image)
-        cropped_image=image.crop((x,y,w+x,h+y))
-        resized_image=cropped_image.resize((200,200), Image.ANTIALIAS)
-        resized_image.save(form.Image.path)
-            
-        return form'''
 
