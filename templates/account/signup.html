@@ -63,8 +63,11 @@ $(document).ready(function(){
 
     //
     window.Parsley.addAsyncValidator('email',function (xhr) {
-        console.log(this.$element);
-        return 404 == xhr.status
+        console.log(xhr);
+
+        var response = xhr.responseJSON['Result'];
+        return response ;
+
     }, '/ajax/email')
 
 }

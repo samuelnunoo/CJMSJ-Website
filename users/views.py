@@ -99,10 +99,13 @@ def email(request):
     email = request.GET.get('email')
     try:
         get_object_or_404(Account, email=email)
+        data = {'Result':False}
+        return JsonResponse(data)
 
     except:
         print("Not Found")
-        return
+        data = {'Result':True}
+        return JsonResponse(data)
 
 
 
