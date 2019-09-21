@@ -96,16 +96,18 @@ def signup(request):
 
 def email(request):
 
-    email = request.POST.get('email')
-    print(email)
-    email_exists = get_object_or_404(Account, email=email)
-    if email_exists:
-        print("Exists")
-        return JsonResponse({'email':True})
+    email = request.GET.get('email')
+    try:
+        get_object_or_404(Account, email=email)
 
-    else:
-        print("Not Exists")
-        return JsonResponse({"email":False})
+    except:
+        print("Not Found")
+        return
+
+
+
+
+
 
 def team(request):
     query = request.GET.get('q')

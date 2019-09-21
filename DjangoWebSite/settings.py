@@ -10,12 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
+
+# Imports
 import os
 import django_heroku
 from dotenv import load_dotenv
 load_dotenv()
 
 
+#Debug Parameters
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
@@ -48,15 +51,10 @@ LOGGING = {
         }
     }
 }
-
 DEBUG_PROPAGATE_EXCEPTIONS = True
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
-
-
-
 
 
 
@@ -67,8 +65,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
-ALLOWED_HOSTS = ['newcjmsjapp.herokuapp.com','cjmsj.org']
+DEBUG = os.environ.get("DEBUG")
+ALLOWED_HOSTS = ['newcjmsjapp.herokuapp.com','cjmsj.org','127.0.0.1']
 
 
 # Application definition
@@ -251,4 +249,6 @@ CKEDITOR_CONFIGS = {
             'width':'100%',
 }}
 
-django_heroku.settings(locals())
+
+#Uncomment for Production
+#django_heroku.settings(locals())

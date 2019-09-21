@@ -23,6 +23,14 @@ class SignUpForm(UserCreationForm):
         model=Account
         fields=('email','password1','password2')
 
+        parsley_extras = {
+
+            'password2': { 'equalto':'password1',
+                           'error-message':'Your passwords do not match.'},
+        }
+
+
+
 
 
 class AccountChangeForm(UserChangeForm):
