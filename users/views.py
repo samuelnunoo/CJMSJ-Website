@@ -199,6 +199,7 @@ def update_profile(request):
             user.first_name = first_Name
             user.last_name = last_Name
             user.bio = biography
+            user.complete = True
             user.save()
             return render(request, 'main/about.html', {})
 
