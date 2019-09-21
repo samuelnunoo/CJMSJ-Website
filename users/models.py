@@ -51,7 +51,7 @@ class Account(AbstractBaseUser):
         unique=True,
     )
 
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=False)
     is_admin = models.BooleanField(default=False)
 
 

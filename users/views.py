@@ -28,10 +28,6 @@ User=get_user_model()
 
 
 def activate(request, uidb64, token):
-    query = request.GET.get('q')
-    if query:
-        print(query)
-        return redirect('/blogs/?q={}'.format(query))
     try:
         uid=urlsafe_base64_decode(uidb64).decode()
         user=User.objects.get(pk=uid)
@@ -39,10 +35,12 @@ def activate(request, uidb64, token):
         user=None
 
     if user is not None and account_activation_token.check_token(user,token):
-        user.is_active=True
-        user.profile.email_confirmed= True
-        print(user.profile.email_confirmed)
+        user.save(commit=False)
+
+        user.is_active = True
+        user.profile.email_confirmed = True
         user.save()
+
         login(request,user)
 
         #So they can Update Their Profile
