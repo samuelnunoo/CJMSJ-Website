@@ -4,6 +4,15 @@
 
 {%  block stylesheets %}
    <link rel="stylesheet" href="{% static 'css/cropper.css' %}">
+   <style>
+        p{
+            font-size:1.3em;
+        }
+
+        img{
+            max-width: 100%;
+        }
+    </style>
 {%  endblock stylesheets %}
 
 {% block content %}
@@ -14,7 +23,7 @@
 
         <div class="container">
             <div class="row">
-                <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2" align="center">
+                <div class="col-lg-10 col-xl-8 offset-lg-1 offset-xl-2" >
                     <div class="intro">
                          <h1 id='Title' contenteditable="true" style='font-size:3.5em;' class="text-center">{{ article.Title }}</h1>
                          <div class="text-center" id="author"> By
