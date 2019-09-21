@@ -60,15 +60,16 @@ $(document).ready(function(){
 
     Email.attr('data-parsley-remote','');
     Email.attr('data-parsley-remote-validator','email');
+    Email.attr('data-parsley-remote-message','Email is already in use');
 
     //
     window.Parsley.addAsyncValidator('email',function (xhr) {
-        console.log(xhr);
 
         var response = xhr.responseJSON['Result'];
         return response ;
 
-    }, '/ajax/email')
+    },  '/ajax/email')
+
 
 }
 )
