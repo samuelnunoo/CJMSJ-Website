@@ -43,7 +43,9 @@ def activate(request, uidb64, token):
         user.profile.email_confirmed= True
         user.save()
         login(request,user)
-        return redirect('/blogs')
+
+        #So they can Update Their Profile
+        return redirect('/users/profile/')
     else:
         return render(request, 'account/account_activation_invalid.html')
 
@@ -159,6 +161,8 @@ def user_profile(request):
             print('2')
             user=get_object_or_404(Profile,user=request.user)
             form=ProfileForm(initial={'first_name':user.first_name,'last_name':user.last_name,'bio':user.bio})
+
+
             context = {
                 #'user':user,
                 "form":form,
