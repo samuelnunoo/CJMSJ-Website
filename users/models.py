@@ -8,7 +8,6 @@ from django.db.models.signals import post_save
 from django.urls import reverse
 
 
-
 class AccountManager(BaseUserManager):
     def create_user(self, email, password=None):
         """
@@ -41,7 +40,6 @@ class AccountManager(BaseUserManager):
 
         user.save(using=self._db)
         return user
-
 
 
 class Account(AbstractBaseUser):
@@ -112,11 +110,13 @@ class Profile(models.Model):
     def __str__(self):
         return '{first_name} {last_name}'.format(first_name=self.first_name,last_name=self.last_name)
 
+
 @receiver(post_save,sender=Account)
 def update_user_profile(sender,instance,created,**kwargs):
     user=instance
     if created:
         profile=Profile(user=user)
+        profile.email_confirmed = True
         profile.save()
 
 
