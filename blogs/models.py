@@ -14,7 +14,7 @@ register = template.Library()
 
 
 class Post(models.Model):
-    Title=models.CharField(max_length=40)
+    Title=models.CharField(max_length=100)
     Created=models.DateTimeField(auto_now_add=True)
     Image=models.ImageField(upload_to='pictures/', default='img/beautiful-landscape.jpg')
     Content=RichTextField()
