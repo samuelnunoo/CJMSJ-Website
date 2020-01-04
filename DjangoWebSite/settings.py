@@ -65,8 +65,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DEBUG")
-ALLOWED_HOSTS = ['newcjmsjapp.herokuapp.com','cjmsj.org',]
+DEBUG = False
+ALLOWED_HOSTS = ['cjmsj-website.herokuapp.com','cjmsj.org',]
 
 
 # Application definition
