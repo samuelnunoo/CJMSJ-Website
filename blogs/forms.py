@@ -10,19 +10,15 @@ from users.models import Profile
 
 
 
-
+#Form View for the Submissions Page
 class PostForm(forms.ModelForm):
-
-    '''x = forms.FloatField(widget=forms.HiddenInput())
-    y = forms.FloatField(widget=forms.HiddenInput())
-    width = forms.FloatField(widget=forms.HiddenInput())
-    height = forms.FloatField(widget=forms.HiddenInput())
-    '''
+    #Profiles
     Profiles = forms.ModelChoiceField(queryset=Profile.objects.all().filter(complete=True).filter(email_confirmed=True),
                                       widget=autocomplete.ModelSelect2Multiple(url='profile-autocomplete'))
 
+
     class Meta:
-        model=Post
+        model = Post #Model to Use 
         Content=forms.CharField(widget=CKEditorWidget())
 
 
@@ -32,7 +28,7 @@ class PostForm(forms.ModelForm):
 
             'Title':forms.TextInput( attrs={'style':"border:none; color:black; font-size:2em;", 'placeholder':'Page Title'}),
             'Image':forms.FileInput(attrs={'accept':'image/*'}),
-            'Content':forms.Textarea(attrs={'style':'border:none',}),
+            'Content':forms.Textarea(attrs={'id':'project_update_textarea','style':'border:none',}),
             'Description': forms.Textarea(attrs={'cols':100,'rows':4,'style':'resize: none; width:100%;'}),
 
         }

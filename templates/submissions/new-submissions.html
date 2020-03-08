@@ -81,6 +81,15 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.2/js/bootstrap.bundle.min.js"></script>
     <script src="{%  static 'js/cropper.js' %}"></script>
+    <script src="https://cdn.ckeditor.com/ckeditor5/17.0.0/classic/ckeditor.js"></script>
+
+    <script>
+      ClassicEditor
+        .create(document.querySelector('#project_update_textarea'))
+        .catch( error => {
+            console.error( error);
+        }); 
+    </script>
 
 
     <script>

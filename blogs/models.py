@@ -14,15 +14,15 @@ register = template.Library()
 
 
 class Post(models.Model):
-    Title=models.CharField(max_length=40)
-    Created=models.DateTimeField(auto_now_add=True)
-    Image=models.ImageField(upload_to='pictures/', default='img/beautiful-landscape.jpg')
-    Content=RichTextField()
-    Approved=models.BooleanField(default=False)
-    Description=models.TextField(default='This is a sample Description',max_length=120)
-    Featured=models.BooleanField(default=False)
-    Author=models.ManyToManyField(Profile)
-    Rejected=models.BooleanField(default=False)
+    Title = models.CharField(max_length=40)
+    Created = models.DateTimeField(auto_now_add=True)
+    Image = models.ImageField(upload_to='pictures/', default='img/beautiful-landscape.jpg')
+    Content = models.TextField()
+    Approved = models.BooleanField(default=False)
+    Description = models.TextField(default='This is a sample Description',max_length=120)
+    Featured = models.BooleanField(default=False)
+    Author = models.ManyToManyField(Profile)
+    Rejected = models.BooleanField(default=False)
 
     def page_url(self):
         print(reverse('blogs:page',kwargs={'id':self.id}))
